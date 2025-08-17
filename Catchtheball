@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Catch the Ball</title>
+  <style>
+    body { margin:0; overflow:hidden; background:#111; }
+    canvas { display:block; margin: auto; background:#222; }
+  </style>
+</head>
+<body>
+<canvas id="gameCanvas"></canvas>
+<script>
+let canvas = document.getElementById("gameCanvas");
+let ctx = canvas.getContext("2d");
+canvas.width = 400; canvas.height = 600;
+
+let ball = {x:200, y:100, r:20, dy:3};
+let paddle = {x:150, y:550, w:100, h:20};
+
+document.addEventListener("mousemove", e=>{
+  paddle.x = e.clientX - paddle.w/2;
+});
+
+function draw() {
+  ctx.clearRect(0,0,400,600);
+  ctx.fillStyle="red";
+  ctx.beginPath();
+  ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI*2);
+  ctx.fill();
+  
+  ctx.fillStyle="cyan";
+  ctx.fillRect(paddle.x, paddle.y, paddle.w, paddle.h);
+}
+
+function update() {
+  ball.y += ball.dy;
+  if (ball.y + ball.r > paddle.y &&
+      ball.x > paddle.x && ball.x < paddle.x+paddle.w) {
+    alert("You caught it! 🎉");
+    ball.y = 0;
+  }
+  if (ball.y > 600) { ball.y = 0; }
+}
+
+function loop() {
+  draw(); update();
+  requestAnimationFrame(loop);
+}
+loop();
+</script>
+</body>
+</html>
